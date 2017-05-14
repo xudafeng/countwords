@@ -1,15 +1,14 @@
 {
-  "name": "node-colors",
+  "name": "countwords",
   "version": "0.1.0",
-  "description": "node-colors",
-  "keywords": ["node-colors"],
+  "description": "count words",
+  "keywords": ["words"],
   "bin": {
-    "node-colors": "./bin/node-colors"
+    "countwords": "./bin/countwords"
   },
-  "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/xudafeng/node-colors.git"
+    "url": "git://github.com/xudafeng/countwords.git"
   },
   "dependencies": {
   },
@@ -28,9 +27,5 @@
   "pre-commit": [
     "jshint"
   ],
-  "homepage": "https://github.com/xudafeng/node-colors",
-  "author": "xudafeng",
-  "email": "xudafeng@126.com",
-  "blog": "http://xdf.me",
   "license": "MIT"
 }

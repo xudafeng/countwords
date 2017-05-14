@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+const cwd = process.cwd();
+const suffix = [`.${process.argv.pop()}`];
+const execPath= path.resolve(process.argv.pop());
+
+const counter = file => {
+  const content = fs.readFileSync(file, 'utf8');
+  var reg = /[^\u4E00-\u9FA5\uf900-\ufa2d]/g;
+  var regzg = /[^\x00-\xff]/g;
+  var temp = content.replace(reg, '');
+  var tempzg = content.replace(regzg, '');
+  return temp.length + tempzg.length;
+};
+
+const walk = function(currentDirectory, root) {
+
+  var filePath = [];
+
+  var tranverse = function(currentDirectory, root) {
+
+    var currentDir = fs.readdirSync(currentDirectory);
+
+    for (var i in currentDir) {
+
+      var currentFile = currentDir[i];
+      var currentFilePath = path.resolve(currentDirectory, currentFile);
+      var stats = fs.statSync(currentFilePath);
+
+      if (stats.isDirectory()) {
+        tranverse(currentFilePath, root);
+        continue;
+      }
+
+      if (stats.isFile() && !!~suffix.indexOf(path.extname(currentFilePath))) {
+        filePath.push({
+          name: path.basename(currentFilePath),
+          path: currentFilePath,
+          words: counter(currentFilePath)
+        });
+      }
+    }
+  };
+  tranverse(currentDirectory, root);
+  return filePath;
+};
+
+
+const list = walk(execPath, execPath);
+
+let total = 0;
+list.forEach(item => {
+  console.log(`${item.name}[${item.words}]`);
+  total += item.words;
+});
+
+console.log(`\ntotal: ${total}\n`);
